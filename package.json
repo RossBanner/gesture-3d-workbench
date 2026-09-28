@@ -1,0 +1,35 @@
+{
+  "name": "gesture-3d-workbench",
+  "productName": "Gesture 3D Workbench",
+  "version": "1.2.0",
+  "description": "An offline webcam-controlled 3D assembly workbench",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "author": "Gesture 3D Workbench",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run typecheck && vite build",
+    "start": "npm run build && electron .",
+    "test": "vitest run",
+    "package": "npm run build && node scripts/package.mjs",
+    "test:desktop": "node scripts/test-desktop.mjs",
+    "test:hands": "node scripts/test-hands.mjs",
+    "assets": "node scripts/assets.mjs"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "1.0.1",
+    "three": "0.186.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "@types/three": "0.186.0",
+    "electron": "44.4.5",
+    "playwright": "1.63.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
+  }
+}

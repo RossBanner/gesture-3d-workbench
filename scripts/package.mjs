@@ -1,0 +1,15 @@
+import { packager } from '@electron/packager';
+import { mkdir,cp,writeFile,readFile,rm } from 'node:fs/promises';
+import path from 'node:path';
+const stage=path.resolve('work/package');
+if (!stage.startsWith(path.resolve('work') + path.sep)) throw new Error('Unsafe staging directory.');
+await rm(stage,{recursive:true,force:true});
+await mkdir(stage,{recursive:true});
+await cp('dist',path.join(stage,'dist'),{recursive:true});
+await cp('electron',path.join(stage,'electron'),{recursive:true});
+await cp('THIRD_PARTY_NOTICES.md',path.join(stage,'THIRD_PARTY_NOTICES.md'));
+await cp('LICENSE',path.join(stage,'LICENSE'));
+const pkg=JSON.parse(await readFile('package.json','utf8'));
+await writeFile(path.join(stage,'package.json'),JSON.stringify({name:pkg.name,productName:pkg.productName,version:pkg.version,description:pkg.description,main:pkg.main,author:pkg.author,license:pkg.license},null,2));
+const result=await packager({dir:stage,name:'Gesture 3D Workbench',out:path.resolve('outputs/releases',pkg.version),platform:'win32',arch:'x64',electronVersion:pkg.devDependencies.electron,asar:true,overwrite:true,prune:false,icon:path.resolve('public/icon.ico'),executableName:'Gesture 3D Workbench',win32metadata:{CompanyName:'Gesture 3D Workbench',FileDescription:'Offline gesture-controlled 3D workbench',ProductName:'Gesture 3D Workbench'}});
+console.log(result.join('\n'));
